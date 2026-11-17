@@ -132,7 +132,21 @@ function generate(){
   currentPages.push(svg);thumbs+=`<div class="page-thumb">${svg}<small>Sheet ${idx} · row ${r+1}, column ${c+1}</small></div>`;
  }
  $('pages').innerHTML=thumbs;
- $('printPages').innerHTML=currentPages.map((s,i)=>`<div class="print-page">${s}</div>`).join('');
+ $('printPages').innerHTML = `
+<div class="print-page" style="padding:20mm;font-family:Arial">
+<h1>SHIRT PATTERN ASSEMBLY GUIDE</h1>
+<h2>How to assemble your A4 pattern sheets</h2>
+<p>1. Print all pages on A4 paper.</p>
+<p>2. Select 100% or Actual Size.</p>
+<p>3. Turn OFF Fit to Page.</p>
+<p>4. Arrange sheets using the matching labels.</p>
+<p>5. Match 1A with 1B, 2A with 2B, and so on.</p>
+<p>6. Align the registration marks and tape the sheets together.</p>
+<p>7. Cut out the completed pattern pieces.</p>
+<h3>Important</h3>
+<p>Check the scale before cutting fabric.</p>
+</div>
+` + currentPages.map((s,i)=>`<div class='print-page'>${s}</div>`).join('');
  $('status').textContent=`Pattern generated. ${pageCount} A4 sheets (${totalCols} columns × ${totalRows} rows).`;
  $('stats').innerHTML=`<span class="pill">Fit: ${$('fit').selectedOptions[0].text}</span><span class="pill">Seam allowance: ${(sa/MM).toFixed(2)} in</span><span class="pill">A4 sheets: ${pageCount}</span><span class="pill">Scale: 1:1 target</span>`;
 }
