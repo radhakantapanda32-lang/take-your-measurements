@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TAKE YOUR MEASUREMENTS — Shirt Pattern Studio</title>
+<style>
+:root{--ink:#172033;--muted:#657087;--line:#dce2eb;--paper:#fff;--bg:#f3f5f9;--accent:#173f73}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:#102b4d;color:white;padding:22px max(18px,calc((100% - 1100px)/2))}
+header h1{margin:0;font-size:23px;letter-spacing:1.4px}header p{margin:5px 0 0;color:#d5e2f2}
+main{max-width:1100px;margin:22px auto;padding:0 16px;display:grid;grid-template-columns:330px 1fr;gap:18px}
+.panel,.preview{background:white;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 5px 20px #1720330a}
+h2{font-size:17px;margin:0 0 14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:12px;color:var(--muted);font-weight:650;margin-bottom:4px}
+input,select{width:100%;padding:10px;border:1px solid #cbd3df;border-radius:8px;font:inherit;background:white;color:var(--ink)}
+.field{margin-bottom:11px}.unit{font-size:11px;color:var(--muted);margin-top:3px}
+button{border:0;border-radius:9px;padding:11px 14px;font-weight:700;cursor:pointer}
+.primary{background:var(--accent);color:white;width:100%;margin-top:8px}.secondary{background:#e9eef5;color:#18314e}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.note{font-size:12px;color:var(--muted);background:#f5f7fa;padding:10px;border-radius:8px;margin-top:12px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.pill{background:#edf2f8;border-radius:20px;padding:5px 9px;font-size:12px}
+#pages{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+.page-thumb{width:140px;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:#fff}
+.page-thumb svg{display:block;width:100%;height:auto}.page-thumb small{display:block;padding:5px 8px;color:var(--muted)}
+#status{font-size:13px;color:var(--muted);margin:8px 0}
+footer{max-width:1100px;margin:0 auto 28px;padding:0 16px;color:var(--muted);font-size:12px}
+@media(max-width:780px){main{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}
+@media print{
+ @page{size:A4 portrait;margin:0}
+ body{background:white;margin:0}
+ header,main,footer{display:none!important}
+ #printPages{display:block!important}
+ .print-page{width:210mm;height:297mm;page-break-after:always;break-after:page;overflow:hidden;margin:0;padding:0}
+ .print-page:last-child{page-break-after:auto;break-after:auto}
+ .print-page svg{display:block;width:210mm;height:297mm}
+}
+#printPages{display:none}
+</style></head>
+<body>
+<header><h1>✂ TAKE YOUR MEASUREMENTS</h1><p>Men's shirt pattern studio · Inches · Regular fit · A4 tiled printing</p></header>
+<main>
+<section class="panel">
+<h2>Customer measurements</h2>
+<div class="grid">
+<div class="field"><label for="chest">Chest</label><input id="chest" type="number" min="20" max="80" step=".25" value="40"><div class="unit">inches</div></div>
+<div class="field"><label for="waist">Waist</label><input id="waist" type="number" min="20" max="80" step=".25" value="36"><div class="unit">inches</div></div>
+<div class="field"><label for="hip">Hip / seat</label><input id="hip" type="number" min="20" max="80" step=".25" value="40"><div class="unit">inches</div></div>
+<div class="field"><label for="shoulder">Shoulder (across)</label><input id="shoulder" type="number" min="10" max="30" step=".25" value="18"><div class="unit">inches</div></div>
+<div class="field"><label for="length">Shirt length</label><input id="length" type="number" min="15" max="50" step=".25" value="29"><div class="unit">inches</div></div>
+<div class="field"><label for="sleeve">Sleeve length</label><input id="sleeve" type="number" min="5" max="40" step=".25" value="24"><div class="unit">inches</div></div>
+<div class="field"><label for="neck">Neck</label><input id="neck" type="number" min="10" max="25" step=".25" value="16"><div class="unit">inches</div></div>
+<div class="field"><label for="upperArm">Upper arm</label><input id="upperArm" type="number" min="7" max="30" step=".25" value="14"><div class="unit">inches</div></div>
+<div class="field"><label for="wrist">Wrist</label><input id="wrist" type="number" min="4" max="20" step=".25" value="7"><div class="unit">inches</div></div>
+<div class="field"><label for="allowance">Seam allowance</label><select id="allowance"><option value=".5" selected>½ inch</option><option value=".375">⅜ inch</option><option value=".625">⅝ inch</option></select><div class="unit">added outside stitch line</div></div>
+</div>
+<div class="field"><label for="fit">Fit</label><select id="fit"><option value="regular" selected>Regular fit</option><option value="slim">Slim fit</option><option value="loose">Loose fit</option></select></div>
+<button class="primary" id="generate">Generate full-size pattern</button>
+<div class="actions"><button class="secondary" id="downloadPdf">Download PDF</button><button class="secondary" id="print">Print</button><button class="secondary" id="reset">Reset</button></div>
+<div class="note"><b>Printing:</b> Choose A4, Portrait, scale 100% / Actual size, and turn OFF “Fit to page”. Use the 50 mm test square to verify printer scale. Join sheets using the 10 mm overlap and page labels.</div>
+</section>
+<section class="preview">
+<h2>Pattern layout & A4 sheets</h2>
+<div id="status">Enter measurements and select Generate to create your tiled pattern.</div>
+<div class="stats" id="stats"></div>
+<div id="pages"></div>
+<div class="note">The preview tiles are individual A4 pages. The pattern includes front, back, sleeve, collar stand, collar and cuff pieces with grainlines and cutting/stitch guides.</div>
+</section>
+</main>
+<footer>Drafting aid only. Make and fit a test garment in inexpensive fabric before cutting final fabric. Shirt block proportions and ease may need adjustment for the wearer's posture, fabric and preferred style.</footer>
+<div id="printPages"></div>
+<script>
+const MM=25.4, A4W=210, A4H=297, OVER=10, STEPX=A4W-OVER, STEPY=A4H-OVER;
+const $=id=>document.getElementById(id), n=id=>Number($(id).value);
+let currentPages=[];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function path(d,extra=''){return `<path d="${d}" ${extra}/>`}
+function line(x1,y1,x2,y2,extra=''){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" ${extra}/>`}
+function pieceLabel(x,y,t){return `<text x="${x}" y="${y}" class="label">${esc(t)}</text>`}
+function generate(){
+ const ids=['chest','waist','hip','shoulder','length','sleeve','neck','upperArm','wrist'];
+ for(const id of ids){if(!(n(id)>0)){alert('Please enter valid positive measurements.');return;}}
+ const ease={slim:1.5,regular:3,loose:5}[ $('fit').value ];
+ const chest=n('chest')*MM, waist=n('waist')*MM, hip=n('hip')*MM, sh=n('shoulder')*MM, bodyL=n('length')*MM, sleeveL=n('sleeve')*MM, neck=n('neck')*MM, arm=n('upperArm')*MM, wrist=n('wrist')*MM, sa=n('allowance')*MM;
+ const quarter=(chest+ease*MM)/4, waistQ=(waist+ease*MM)/4, hipQ=(hip+ease*MM)/4;
+ const bw=Math.max(quarter,waistQ,hipQ)+sa*2, bh=bodyL+sa*2;
+ const sleeveW=(arm+4*MM)/2+sa*2, sleeveH=sleeveL+sa*2;
+ const collarL=neck+25, collarW=75, cuffL=(wrist+50)/2, cuffW=115;
+ const gap=35, margin=18;
+ const xFront=margin, xBack=margin+bw+gap, yBody=margin;
+ const xSleeve=margin, ySleeve=yBody+bh+gap;
+ const xCollar=margin+sleeveW+gap, yCollar=ySleeve;
+ const xCuff=margin, yCuff=ySleeve+sleeveH+gap;
+ const canvasW=Math.max(xBack+bw+margin,xCollar+collarL+margin,xCuff+Math.max(cuffL,collarL)+margin, A4W);
+ const canvasH=Math.max(yBody+bh+margin,ySleeve+sleeveH+margin,yCollar+collarW+margin,yCuff+cuffW+margin);
+ const style=`<style>.cut{fill:none;stroke:#172033;stroke-width:1.1}.stitch{fill:none;stroke:#4779a8;stroke-width:.55;stroke-dasharray:3 2}.guide{stroke:#8b96a8;stroke-width:.45;fill:none}.grain{stroke:#172033;stroke-width:.65;fill:none}.label{font:5px Arial;fill:#172033}.small{font:3.6px Arial;fill:#536176}.notch{stroke:#172033;stroke-width:.8}</style>`;
+ let pieces='';
+ function bodyPiece(x,y,name,front){
+  const w=bw-2*sa, h=bodyL;
+  const neckW=front?Math.min(85,neck*.23):Math.min(75,neck*.20), neckD=front?70:24;
+  const armD=Math.min(125,sh*.42), hemY=h;
+  const d=`M ${sa} ${neckD} Q ${sa+neckW*.45} ${front?neckD+8:neckD-10} ${sa+neckW} ${sa} L ${sa+w-armD*.45} ${sa} Q ${sa+w+sa*.15} ${sa+35} ${sa+w} ${sa+armD} L ${sa+w} ${hemY+sa} L ${sa} ${hemY+sa} Z`;
+  pieces+=`<g transform="translate(${x} ${y})">${path(d,'class="cut"')}${line(sa+4,sa+neckD+8,sa+4,hemY+sa-8,'class="stitch"')}${line(sa+w-4,sa+armD+8,sa+w-4,hemY+sa-8,'class="stitch"')}${line(sa+8,hemY+sa-12,sa+w-8,hemY+sa-12,'class="stitch"')}${line(sa+w/2,sa+30,sa+w/2,hemY+sa-25,'class="grain"')}${pieceLabel(sa+w/2-18,hemY/2,name)}${pieceLabel(sa+w/2-16,hemY/2+8,'CUT 1 '+(front?'MIRROR':'ON FOLD'))}${pieceLabel(sa+w/2-12,hemY/2+16,'SA '+(sa/MM).toFixed(2)+' IN')}${line(sa+w/2,sa+55,sa+w/2,sa+70,'class="notch"')}</g>`;
+ }
+ bodyPiece(xFront,yBody,'SHIRT FRONT',true);bodyPiece(xBack,yBody,'SHIRT BACK',false);
+ // sleeve cap, tapered to wrist
+ const sw=sleeveW-2*sa, shh=sleeveL;
+ const sd=`M ${sa} ${sa+65} Q ${sa+sw*.18} ${sa-8} ${sa+sw*.5} ${sa} Q ${sa+sw*.82} ${sa-8} ${sa+sw+sa} ${sa+65} L ${sa+sw+sa} ${shh+sa} L ${sa} ${shh+sa} Z`;
+ pieces+=`<g transform="translate(${xSleeve} ${ySleeve})">${path(sd,'class="cut"')}${path(`M ${sa+5} ${sa+68} Q ${sa+sw*.5} ${sa+14} ${sa+sw+sa-5} ${sa+68}`,'class="stitch"')}${line(sa+sw/2,sa+85,sa+sw/2,shh+sa-10,'class="grain"')}${pieceLabel(sa+sw/2-12,shh/2,'SLEEVE')}${pieceLabel(sa+sw/2-14,shh/2+8,'CUT 2 MIRROR')}${line(sa+sw/2,sa+20,sa+sw/2,sa+31,'class="notch"')}</g>`;
+ // collar stand and collar: two long shaped rectangles/curves
+ const cl=collarL, cw=collarW;
+ pieces+=`<g transform="translate(${xCollar} ${yCollar})">${path(`M 0 0 Q ${cl/2} 7 ${cl} 0 L ${cl} 32 Q ${cl/2} 40 0 32 Z`,'class="cut"')}${line(3,5,cl-3,5,'class="stitch"')}${pieceLabel(cl/2-22,18,'COLLAR STAND · CUT 2')}${path(`M 0 42 Q ${cl/2} 48 ${cl} 42 L ${cl} 112 Q ${cl/2} 120 0 112 Z`,'class="cut"')}${line(3,47,cl-3,47,'class="stitch"')}${pieceLabel(cl/2-13,80,'COLLAR · CUT 2')}</g>`;
+ // cuffs as two rectangles
+ pieces+=`<g transform="translate(${xCuff} ${yCuff})">${path(`M 0 0 H ${cuffL} V ${cuffW} H 0 Z`,'class="cut"')}${path(`M 5 5 H ${cuffL-5} V ${cuffW-5} H 5 Z`,'class="stitch"')}${pieceLabel(cuffL/2-12,cuffW/2,'CUFF · CUT 2')}${line(cuffL/2,10,cuffL/2,cuffW-10,'class="guide"')}</g>`;
+ // placket strip
+ const px=xCuff+cuffL+20, py=yCuff;
+ pieces+=`<g transform="translate(${px} ${py})">${path(`M 0 0 H 38 V ${bodyL*.32} H 0 Z`,'class="cut"')}${pieceLabel(3,bodyL*.16,'PLACKET · CUT 2')}</g>`;
+ const totalCols=Math.max(1,Math.ceil((canvasW-OVER)/STEPX)), totalRows=Math.max(1,Math.ceil((canvasH-OVER)/STEPY));
+ const pageCount=totalCols*totalRows;
+ const svgFor=(col,row,idx)=>{
+  const ox=col*STEPX, oy=row*STEPY;
+  let marks=`<rect x="0" y="0" width="210" height="297" fill="white"/>`;
+  // small registration crosses within overlap zones
+  const cross=(x,y)=>line(x-3,y,x+3,y,'stroke="#657087" stroke-width=".5"')+line(x,y-3,x,y+3,'stroke="#657087" stroke-width=".5"');
+  marks+=cross(ox+8,oy+8)+cross(ox+202,oy+8)+cross(ox+8,oy+289)+cross(ox+202,oy+289);
+  if(idx===1){marks+=`<rect x="${ox+12}" y="${oy+12}" width="50" height="50" fill="none" stroke="#172033" stroke-width=".6"/><text x="${ox+12}" y="${oy+68}" font-size="4">50 mm TEST SQUARE</text>`;}
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${ox} ${oy} 210 297" width="210mm" height="297mm">${style}${marks}<g>${pieces}</g><g><text x="${ox+10}" y="${oy+280}" font-size="4" fill="#667085">TAKE YOUR MEASUREMENTS · A4 ${idx}/${pageCount} · OVERLAP 10 mm</text></g></svg>`;
+ };
+ currentPages=[];
+ let thumbs='';
+ for(let r=0;r<totalRows;r++)for(let c=0;c<totalCols;c++){
+  const idx=currentPages.length+1, svg=svgFor(c,r,idx);
+  currentPages.push(svg);thumbs+=`<div class="page-thumb">${svg}<small>Sheet ${idx} · row ${r+1}, column ${c+1}</small></div>`;
+ }
+ $('pages').innerHTML=thumbs;
+ $('printPages').innerHTML = `
+<div class="print-page" style="padding:20mm;font-family:Arial">
+<h1>SHIRT PATTERN ASSEMBLY GUIDE</h1>
+<h2>How to assemble your A4 pattern sheets</h2>
+<p>1. Print all pages on A4 paper.</p>
+<p>2. Select 100% or Actual Size.</p>
+<p>3. Turn OFF Fit to Page.</p>
+<p>4. Arrange sheets using the matching labels.</p>
+<p>5. Match 1A with 1B, 2A with 2B, and so on.</p>
+<p>6. Align the registration marks and tape the sheets together.</p>
+<p>7. Cut out the completed pattern pieces.</p>
+<h3>Important</h3>
+<p>Check the scale before cutting fabric.</p>
+</div>
+` + currentPages.map((s,i)=>`<div class='print-page'>${s}</div>`).join('');
+ $('status').textContent=`Pattern generated. ${pageCount} A4 sheets (${totalCols} columns × ${totalRows} rows).`;
+ $('stats').innerHTML=`<span class="pill">Fit: ${$('fit').selectedOptions[0].text}</span><span class="pill">Seam allowance: ${(sa/MM).toFixed(2)} in</span><span class="pill">A4 sheets: ${pageCount}</span><span class="pill">Scale: 1:1 target</span>`;
+}
+$('generate').addEventListener('click',generate);
+
+// Create a real, downloadable A4 PDF instead of relying on the mobile preview's
+// often-unsupported window.print() implementation.
+async function ensureJsPDF(){
+ if(window.jspdf && window.jspdf.jsPDF) return window.jspdf.jsPDF;
+ if(window.__loadingJsPDF) return window.__loadingJsPDF;
+ window.__loadingJsPDF=new Promise((resolve,reject)=>{
+  const script=document.createElement('script');
+  script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  script.onload=()=>window.jspdf?.jsPDF?resolve(window.jspdf.jsPDF):reject(new Error('PDF library did not load.'));
+  script.onerror=()=>reject(new Error('Could not load the PDF library. Check your internet connection and try again.'));
+  document.head.appendChild(script);
+ });
+ try{return await window.__loadingJsPDF;}finally{window.__loadingJsPDF=null;}
+}
+async function downloadPDF(){
+ if(!currentPages.length) generate();
+ if(!currentPages.length) return;
+ const button=$('downloadPdf'), oldText=button.textContent;
+ button.disabled=true; button.textContent='Preparing PDF…';
+ $('status').textContent='Preparing your A4 PDF. Please wait…';
+ try{
+  const jsPDF=await ensureJsPDF();
+  const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  for(let i=0;i<currentPages.length;i++){
+   if(i>0) pdf.addPage('a4','portrait');
+   const svg=currentPages[i];
+   const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'});
+   const url=URL.createObjectURL(blob);
+   try{
+    const img=new Image();
+    await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(new Error('Could not render pattern sheet '+(i+1)));img.src=url;});
+    const canvas=document.createElement('canvas');
+    canvas.width=1680; canvas.height=2376; // crisp A4 output at approximately 203 dpi
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,210,297,undefined,'FAST');
+    canvas.width=canvas.height=1;
+   }finally{URL.revokeObjectURL(url);}
+   $('status').textContent='Building PDF sheet '+(i+1)+' of '+currentPages.length+'…';
+  }
+  pdf.save('Take-Your-Measurements-Mens-Shirt-Pattern.pdf');
+  $('status').textContent='PDF created. Open your Downloads folder to find it. Print on A4 at 100% / Actual size.';
+ }catch(err){
+  console.error(err);
+  $('status').textContent='PDF could not be created: '+err.message+' You can still try the Print button.';
+  alert('PDF download failed. '+err.message);
+ }finally{button.disabled=false;button.textContent=oldText;}
+}
+$('downloadPdf').addEventListener('click',downloadPDF);
+$('print').addEventListener('click',()=>{if(!currentPages.length)generate();if(currentPages.length)window.print();});
+$('reset').addEventListener('click',()=>{location.reload();});
+generate();
+</script></body></html>
